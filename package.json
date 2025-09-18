@@ -1,0 +1,62 @@
+{
+  "name": "vue-img",
+  "version": "2.0.0",
+  "description": "基于Vue 3和Element Plus的现代化图床应用，支持图片上传、展示和后台管理",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "build": "npm run client:build",
+    "preview": "vite preview",
+    "start": "node server.js",
+    "server:dev": "nodemon server.js",
+    "client:dev": "vite",
+    "client:build": "vite build",
+    "install-deps": "npm install"
+  },
+  "keywords": [
+    "vue3",
+    "element-plus",
+    "image-host",
+    "upload",
+    "图床",
+    "图片上传",
+    "express",
+    "nodejs",
+    "后台管理"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "axios": "^1.5.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "element-plus": "^2.3.14",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.3.4",
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.0.1",
+    "unplugin-auto-import": "^0.16.6",
+    "unplugin-vue-components": "^0.25.2",
+    "vite": "^4.4.9"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/vue-image-host.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/vue-image-host/issues"
+  },
+  "homepage": "https://github.com/yourusername/vue-image-host#readme"
+}
