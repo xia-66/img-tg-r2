@@ -1,18 +1,13 @@
 {
   "name": "vue-img",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "基于Vue 3和Element Plus的现代化图床应用，支持图片上传、展示和后台管理",
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
-    "build": "npm run client:build",
-    "preview": "vite preview",
-    "start": "node server.js",
-    "server:dev": "nodemon server.js",
-    "client:dev": "vite",
-    "client:build": "vite build",
-    "install-deps": "npm install"
+    "dev": "concurrently \"nodemon server.js\" \"vite\"",
+    "build": "vite build",
+    "start": "node server.js"
   },
   "keywords": [
     "vue3",
@@ -32,7 +27,6 @@
     "axios": "^1.5.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
     "element-plus": "^2.3.14",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",

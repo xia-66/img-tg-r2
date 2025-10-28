@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
@@ -54,6 +54,23 @@ const loginRules = {
     { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }
   ]
 }
+
+// 检查是否已登录
+onMounted(async () => {
+  const token = localStorage.getItem('admin_token')
+  if (token) {
+    try {
+      // 验证token是否有效
+      await adminAPI.verifyToken()
+      // token有效，直接跳转到管理页面
+      ElMessage.success('您已登录，正在跳转...')
+      router.push('/admin')
+    } catch (error) {
+      // token无效，清除并停留在登录页
+      localStorage.removeItem('admin_token')
+    }
+  }
+})
 
 // 处理登录
 const handleLogin = async () => {

@@ -15,7 +15,7 @@ COPY public/ ./public/
 
 # 安装依赖并构建前端
 RUN npm ci && \
-    npm run client:build
+    npm run build
 
 # 第二阶段：构建生产镜像
 FROM node:22-alpine AS production

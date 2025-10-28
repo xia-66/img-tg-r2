@@ -5,22 +5,21 @@ import fs from 'fs'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
 import { fileURLToPath } from 'url'
-import dotenv from 'dotenv'
+
 
 // ES模块中获取__dirname
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// 配置dotenv（在Docker环境中由于环境变量已通过docker-compose传递，dotenv主要用于本地开发）
-// 在生产环境中禁用dotenv的输出信息
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config()
-}
-
 const app = express()
-const PORT = process.env.PORT || 33000
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+
+// 固定端口配置
+const PORT = 33000
+
+// 自动生成JWT密钥（每次启动时生成随机密钥）
+const JWT_SECRET = crypto.randomBytes(64).toString('hex')
 
 // 支持的图片格式
 const SUPPORTED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp']
@@ -34,14 +33,18 @@ const sendError = (res, statusCode, message) => {
   })
 }
 
-// 生成基础URL
-function getBaseUrl() {
-  // 如果设置了 APP_URL 环境变量，直接使用
-  if (process.env.APP_URL) {
-    return process.env.APP_URL
+// 生成基础URL（根据请求动态获取）
+function getBaseUrl(req) {
+  // 如果有请求对象，从请求头中获取实际访问的URL
+  if (req) {
+    const protocol = req.protocol || 'http'
+    const host = req.get('host')
+    if (host) {
+      return `${protocol}://${host}`
+    }
   }
 
-  // 默认使用localhost，生产环境建议设置APP_URL环境变量
+  // 默认使用localhost
   return `http://localhost:${PORT}`
 }
 
@@ -64,8 +67,8 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }))
 // 在生产环境中，Vue应用会被构建到dist目录
 app.use(express.static('dist'))
 
-// 确保上传目录存在
-const uploadDir = path.join(__dirname, process.env.UPLOAD_DIR || 'uploads')
+// 确保上传目录存在（固定为uploads目录）
+const uploadDir = path.join(__dirname, 'uploads')
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true })
 }
@@ -150,7 +153,7 @@ app.post('/api/admin/login', async (req, res) => {
       return sendError(res, 401, '用户名或密码错误')
     }
 
-    const token = jwt.sign({ username: adminUser.username }, JWT_SECRET, { expiresIn: '24h' })
+    const token = jwt.sign({ username: adminUser.username }, JWT_SECRET, { expiresIn: '2h' })
 
     res.json({
       success: true,
@@ -187,7 +190,7 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
       return sendError(res, 400, '请选择要上传的图片文件')
     }
 
-    const baseUrl = getBaseUrl()
+    const baseUrl = getBaseUrl(req)
     const imageUrl = `${baseUrl}/uploads/${req.file.filename}`
 
     res.json({
@@ -214,7 +217,7 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
 app.get('/api/images', (req, res) => {
   try {
     const files = fs.readdirSync(uploadDir)
-    const baseUrl = getBaseUrl()
+    const baseUrl = getBaseUrl(req)
 
     const images = files
       .filter(file => {
@@ -382,12 +385,13 @@ async function startServer() {
   await initAdmin()
 
   app.listen(PORT, '0.0.0.0', () => {
-    const baseUrl = getBaseUrl()
     console.log(`🚀 图床服务器已启动`)
-    console.log(`🔗 访问地址: ${baseUrl}`)
+    console.log(`🔗 访问地址: http://localhost:${PORT}`)
     console.log(`📁 上传目录: ${uploadDir}`)
     console.log(`👤 管理员账号已初始化`)
+    console.log(`🔑 JWT密钥已自动生成`)
     console.log(`🌐 服务器监听: 0.0.0.0:${PORT}`)
+    console.log(`📝 图片URL将根据访问地址动态生成`)
   })
 }
 

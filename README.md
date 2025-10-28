@@ -84,14 +84,8 @@ npm install
 #### 2. 启动服务
 
 ```bash
-# 开发模式 (同时启动前后端)
+# 开发模式（同时启动前后端）
 npm run dev
-
-# 仅启动后端服务器
-npm run server:dev
-
-# 仅启动前端开发服务器
-npm run client:dev
 
 # 构建前端项目
 npm run build
@@ -230,50 +224,36 @@ DELETE /api/images/:filename
 
 ### 环境变量配置
 
-创建 `.env` 文件并配置以下选项：
+只需配置以下必要的环境变量（在 `docker-compose.yml` 中）：
 
 ```bash
-# 服务器配置
-PORT=33000
-
-# JWT配置
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-
-# 管理员账号配置
+# 管理员账号配置（必需）
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin123
 
-# 文件上传配置
+# 文件上传配置（可选，默认10MB）
 MAX_FILE_SIZE=10485760
-
-# 应用URL配置（可选）
-# 不设置时会自动检测：开发环境使用127.0.0.1，生产环境检测公网IP
-APP_URL=http://your-domain.com:33000
 ```
 
 ### 自动配置机制
 
-应用启动时会自动检查并生成配置文件：
+应用启动时会自动配置以下内容，无需手动设置：
 
-1. **自动生成 .env**: 如果 `.env` 文件不存在，会自动创建默认配置
-2. **环境变量优先**: 可以通过挂载自定义 `.env` 文件覆盖默认配置
-3. **零配置启动**: Docker 部署无需手动创建任何配置文件
+1. **端口**: 固定为 `33000`
+2. **JWT 密钥**: 启动时自动生成随机密钥（64 字节）
+3. **上传目录**: 固定为 `uploads` 目录
+4. **图片 URL**: 根据请求动态生成，自动适配访问地址
+5. **NODE_ENV**: 在 Dockerfile 中已设置为 `production`
 
 ### URL 生成规则
 
-1. **优先级 1**: 如果设置了 `APP_URL` 环境变量，直接使用
-2. **优先级 2**: 开发环境 (`NODE_ENV != production`) 自动使用 `http://127.0.0.1:PORT`
-3. **优先级 3**: 生产环境自动检测公网 IP，生成 `http://公网IP:PORT`
+图片 URL 会根据实际访问地址动态生成：
 
-### 代码配置
+- 访问 `http://localhost:33000` → 图片 URL 为 `http://localhost:33000/uploads/xxx.jpg`
+- 访问 `http://192.168.1.100:33000` → 图片 URL 为 `http://192.168.1.100:33000/uploads/xxx.jpg`
+- 访问 `http://example.com:33000` → 图片 URL 为 `http://example.com:33000/uploads/xxx.jpg`
 
-也可以在 `server.js` 中直接修改：
-
-```javascript
-const PORT = process.env.PORT || 33000
-const uploadDir = './uploads'
-const maxFileSize = 10 * 1024 * 1024 // 10MB
-```
+无需手动配置 `APP_URL`，系统会自动识别。
 
 ## 🚀 部署建议
 

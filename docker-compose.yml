@@ -3,23 +3,14 @@ services:
     image: heiyus/vue-img:latest
     container_name: vue-img
     ports:
-      # 外部端口:内部端口 - 如果端口冲突，请修改左侧端口号
-      # 常用替代端口: 8080、8888、9000、3000、5000、7000等
       - '33000:33000'
     volumes:
       - ./uploads:/app/uploads
     environment:
-      - NODE_ENV=production
-      - PORT=33000
-      # 如果需要自定义，请取消注释并修改以下配置
-      - JWT_SECRET=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsImFkbWluIjp0cnVlfQ.zed6vXvP4c-GF_rkaAwahnQbw7rC5UJcSK4nAK0O5PR6s7R1tNOWf51uMAV8QGcM-QGKukIFKtfRzThs1RZsJg
-      - ADMIN_USERNAME=heiyu
-      - ADMIN_PASSWORD=918822gjy
+      # 必需配置：管理员账号密码
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin123
+      # 可选配置：文件大小限制（字节），默认10MB
       - MAX_FILE_SIZE=10485760
-      # 注意：如果修改了上面的外部端口，请同步修改APP_URL中的端口号
-      - APP_URL=http://27.106.122.68:33000
     restart: unless-stopped
-# 端口冲突解决方案：
-# 1. 修改 '33000:33000' 为 '你的端口:33000' 例如: '8080:33000'
-# 2. 同步修改 APP_URL 为: http://你的IP:你的端口
-# 3. 常用可选端口: 8080, 8888, 9000, 3000, 5000, 7000, 9999
+
