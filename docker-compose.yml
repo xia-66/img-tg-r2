@@ -1,0 +1,46 @@
+services:
+  img-tg-r2:
+    build: .
+    container_name: img-tg-r2
+    restart: unless-stopped
+    ports:
+      - "33000:33000"
+    environment:
+      # 管理员账号配置
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      
+      # 默认存储方式
+      - DEFAULT_STORAGE=${DEFAULT_STORAGE:-telegraph}
+      
+      # Telegraph 配置
+      - TG_BOT_TOKEN=${TG_BOT_TOKEN:-}
+      - TG_CHAT_ID=${TG_CHAT_ID:-}
+      
+      # Cloudflare R2 配置
+      - R2_ACCOUNT_ID=${R2_ACCOUNT_ID:-}
+      - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID:-}
+      - R2_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY:-}
+      - R2_BUCKET_NAME=${R2_BUCKET_NAME:-}
+      - R2_PUBLIC_DOMAIN=${R2_PUBLIC_DOMAIN:-}
+      
+      # Node 环境
+      - NODE_ENV=production
+    volumes:
+      # 持久化索引文件
+      - ./telegraph-index.json:/app/telegraph-index.json
+      - ./r2-index.json:/app/r2-index.json
+      - ./storage-config.json:/app/storage-config.json
+    networks:
+      - img-tg-r2-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:33000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  img-tg-r2-network:
+    driver: bridge
+

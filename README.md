@@ -1,6 +1,6 @@
-# 📸 Vue 图床
+# 📸 img-tg-r2 云端图床
 
-一个现代化的图床应用，基于 Vue 3 + Element Plus + Node.js 开发，支持图片上传、展示和后台管理，支持 Docker 一键部署。
+一个现代化的云端图床应用，基于 Vue 3 + Element Plus + Node.js 开发，支持 Telegraph 和 Cloudflare R2 云存储，支持 Docker 一键部署。
 
 ## ✨ 功能特色
 
@@ -46,10 +46,10 @@
 
 ```bash
 # 1. 创建项目目录
-mkdir vue-img && cd vue-img
+mkdir img-tg-r2 && cd img-tg-r2
 
 # 2. 下载配置文件
-curl -O https://raw.githubusercontent.com/heiyus/vue-img/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/xia-66/img-tg-r2/main/docker-compose.yml
 
 # 3. 启动服务（.env文件会自动生成）
 docker-compose up -d
@@ -63,11 +63,11 @@ docker-compose up -d
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/heiyus/vue-img.git
-cd vue-img
+git clone https://github.com/xia-66/img-tg-r2.git
+cd img-tg-r2
 
 # 2. 构建镜像
-docker build -t vue-img:latest .
+docker build -t img-tg-r2:latest .
 
 # 3. 启动服务
 docker-compose up -d
@@ -79,8 +79,8 @@ docker-compose up -d
 
 ```bash
 # 克隆项目
-git clone https://github.com/heiyus/vue-img.git
-cd vue-img
+git clone https://github.com/xia-66/img-tg-r2.git
+cd img-tg-r2
 
 # 安装依赖
 npm install
@@ -107,7 +107,7 @@ npm start
 ## 📁 项目结构
 
 ```
-vue-image-host/
+img-tg-r2/
 ├── server.js          # Express 服务器
 ├── package.json       # 项目配置
 ├── vite.config.js     # Vite 配置
@@ -397,7 +397,7 @@ npm start
 
 ```bash
 npm install -g pm2
-pm2 start server.js --name "vue-img"
+pm2 start server.js --name "img-tg-r2"
 pm2 startup
 pm2 save
 ```
@@ -443,8 +443,8 @@ server {
 
 ## 🐛 问题反馈
 
-如果遇到任何问题，请在 [Issues](https://github.com/yourusername/local-image-host/issues) 页面提交反馈。
+如果遇到任何问题，请在 [Issues](https://github.com/xia-66/img-tg-r2/issues) 页面提交反馈。
 
 ---
 
-❤️ **感谢使用本地图床！**
+❤️ **感谢使用 img-tg-r2 云端图床！**

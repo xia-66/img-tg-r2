@@ -1,7 +1,7 @@
 {
-  "name": "vue-img",
+  "name": "img-tg-r2",
   "version": "2.1.0",
-  "description": "基于Vue 3和Element Plus的现代化图床应用，支持图片上传、展示和后台管理",
+  "description": "基于Vue 3和Element Plus的云端图床应用，支持Telegraph和Cloudflare R2存储",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -51,10 +51,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/vue-image-host.git"
+    "url": "https://github.com/xia-66/img-tg-r2.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/vue-image-host/issues"
+    "url": "https://github.com/xia-66/img-tg-r2/issues"
   },
-  "homepage": "https://github.com/yourusername/vue-image-host#readme"
+  "homepage": "https://github.com/xia-66/img-tg-r2#readme"
 }
